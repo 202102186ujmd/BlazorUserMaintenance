@@ -1,0 +1,69 @@
+﻿@page "/fetchuserdetails"
+<h1>User Data</h1>
+<p>Mantenimiento de Usuarios</p>
+<div class="row">
+    <div class="col-md-6">
+        <a href="/user/add" class="btn btn-primary" role="button">
+            <i class="fas fa-user-plus"></i>
+            Agregar Usuario
+        </a>
+    </div>
+    <div class="imput-group col">
+        <input type="text" class="form-control" placeholder="Buscar por nombre"
+        />
+    </div>
+    <br />
+    @if (usersList == null)
+    {
+        <p><em>Cargando...</em>></p>
+    }
+    else
+    {
+
+        <table class="table table-striped align=middle table=bordered">
+            <thead class="table-success">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Direccion</th>
+                    <th>Telefono Celular</th>
+                    <th>Correo Electronico</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in usersList)
+                {
+                    <tr>
+                        <td>@user.UserId</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Address</td>
+                        <td>@user.CellNumber</td>
+                        <td>@user.EmailId</td>
+                        <td>
+                            <a href="/user/edit/@user.UserId" class="btn btn-outline-dark" role="button">
+                                Editar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+               
+        </table>
+        
+    }
+
+
+</div>
+
+@code {
+    List<User>? usersList = new List<User>();
+    protected override  async Task OnInitializedAsync()
+    {
+        await GetUser();
+    }
+
+    protected async Task GetUser()
+    {
+        usersList = await Http.GetFromJsonAsync<List<User>>("http://localhost:5065/api/User");
+    }
+}
