@@ -8,18 +8,31 @@
             Agregar Usuario
         </a>
     </div>
+    <br />
+    <!--Campo de busqueda-->
     <div class="imput-group col">
         <input type="text" class="form-control" placeholder="Buscar por nombre"
-        />
+        @bind="searchString" @bind:event="oninput" @onkeyup="FilterUser" />
+        <!--Boton para limpiar el campo de busqueda-->
+        @if(searchString.Length > 0)
+        {
+            <div class="input-group-apped">
+                <button class="btn btn-danger" @onclick="resetSearch">
+                    <i class="fas fa-times"></i>Limpiar
+                </button>
+            </div>
+        }
     </div>
-    <br />
+</div>
+    <br/>
+    <!--Mensaje de Carga de los datos-->
     @if (usersList == null)
     {
         <p><em>Cargando...</em>></p>
     }
     else
     {
-
+        <!--Tabla de usuarios-->
         <table class="table table-striped align=middle table=bordered">
             <thead class="table-success">
                 <tr>
@@ -39,6 +52,7 @@
                         <td>@user.Address</td>
                         <td>@user.CellNumber</td>
                         <td>@user.EmailId</td>
+                        <!--Botones para editar y eliminar-->
                         <td>
                             <a href="/user/edit/@user.UserId" class="btn btn-outline-dark" role="button">
                                 Editar
@@ -49,24 +63,52 @@
                         </td>
                     </tr>
                 }
-            </tbody>
-               
-        </table>
-        
+            </tbody>   
+        </table>   
     }
 
 
-</div>
-
 @code {
     List<User>? usersList = new List<User>();
+    List<User>? searchUserData = new List<User>();//lo que se encontro de la busqueda
+    User user= new User();
+    string searchString { get; set; }=string.Empty; //capturamos lo que se quiere buscar
+
+    //Metodo para obtener los usuarios y cargarlos en la lista
     protected override  async Task OnInitializedAsync()
     {
         await GetUser();
     }
 
+    //Metodo para obtener los usuarios
     protected async Task GetUser()
     {
-        usersList = await Http.GetFromJsonAsync<List<User>>("/api/User");
+        usersList = await Http.GetFromJsonAsync<List<User>>("api/User");
+        searchUserData = usersList; //cargamos la lista de usuarios en la lista de busqueda
     }
+
+    //Metodo para filtrar los usuarios y realizar la busqueda
+    protected void FilterUser()
+    {
+        if (!string.IsNullOrEmpty(searchString))
+        {
+            //si hay algo en el campo de busqueda, se filtra la lista de usuarios
+            usersList= searchUserData
+            .Where(x => x.UserName.IndexOf(searchString,StringComparison.OrdinalIgnoreCase)!= -1)
+            .ToList();
+        }
+        else
+        {
+            usersList = searchUserData;//si no hay nada en el campo de busqueda, se cargan todos los usuarios
+        }
+    }
+
+    //Metodo para limpiar el campo de busqueda
+    protected void resetSearch()
+    {
+        searchString = string.Empty;//limpiamos el campo de busqueda
+        usersList = searchUserData;//cargamos todos los usuarios
+
+    }
+
 }

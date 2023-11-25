@@ -14,8 +14,6 @@ builder.Services.AddHttpClient("",options =>
 {
     options.BaseAddress = new Uri(builder.Configuration.GetSection("UrlData").GetValue<string>("BaseAddressURL"));
 });
-//agregar url del api
-
 
 var app = builder.Build();
 
