@@ -92,6 +92,7 @@ namespace WebApiUser.Services
                 var usertoupdate = db.Users.Find(userid);
                 if (usertoupdate != null)
                 {
+                   usertoupdate.UserId = userid;
                    usertoupdate.UserName = user.UserName ?? usertoupdate.UserName;
                    usertoupdate.Address = user.Address ?? usertoupdate.Address;
                    usertoupdate.CellNumber = user.CellNumber ?? usertoupdate.CellNumber;

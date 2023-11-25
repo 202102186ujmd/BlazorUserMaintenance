@@ -43,6 +43,9 @@
                             <a href="/user/edit/@user.UserId" class="btn btn-outline-dark" role="button">
                                 Editar
                             </a>
+                            <a href="/user/delete/@user.UserId" class="btn btn-outline-dark">
+                                Eliminar
+                            </a>
                         </td>
                     </tr>
                 }
@@ -64,6 +67,6 @@
 
     protected async Task GetUser()
     {
-        usersList = await Http.GetFromJsonAsync<List<User>>("http://localhost:5065/api/User");
+        usersList = await Http.GetFromJsonAsync<List<User>>("/api/User");
     }
 }
