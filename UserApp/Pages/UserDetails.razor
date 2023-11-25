@@ -34,6 +34,7 @@
     {
         <!--Tabla de usuarios-->
         <table class="table table-striped align=middle table=bordered">
+            <!--Encabezado de la tabla-->
             <thead class="table-success">
                 <tr>
                     <th>ID</th>
@@ -41,11 +42,13 @@
                     <th>Direccion</th>
                     <th>Telefono Celular</th>
                     <th>Correo Electronico</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var user in usersList)
                 {
+                    <!--Cuerpo o campos de datos que contendra la tabla de la tabla-->
                     <tr>
                         <td>@user.UserId</td>
                         <td>@user.UserName</td>
@@ -57,7 +60,7 @@
                             <a href="/user/edit/@user.UserId" class="btn btn-outline-dark" role="button">
                                 Editar
                             </a>
-                            <a href="/user/delete/@user.UserId" class="btn btn-outline-dark">
+                            <a href="/user/delete/@user.UserId" class="btn btn-outline-dark" role="button">
                                 Eliminar
                             </a>
                         </td>

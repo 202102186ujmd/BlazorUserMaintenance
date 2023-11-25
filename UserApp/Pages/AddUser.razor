@@ -1,5 +1,39 @@
-﻿<h3>AddUser</h3>
+﻿@page "/adduser"
 
 @code {
+    [Parameter]
+    public int userId { get; set; }
+    protected string Title = "Agregar";
+    protected User? user = new User();
 
+    //Metodo para agregar un usuario
+    protected override async Task OnParametersSetAsync()
+    {
+        if(userId != 0)
+        {
+            Title = "Editar";
+            user = await Http.GetFromJsonAsync<User>("api/User/" + userId);
+        }
+    }
+
+    //Metodo para guardar un usuario
+    protected async Task SaveUser()
+    {
+        if (user.UserId != 0)
+        {
+            //si el usuario ya existe, se actualiza
+            await Http.PutAsJsonAsync("api/User/" + user.UserId, user);
+        }
+        else
+        {
+            //si el usuario no existe, se agrega
+            await Http.PostAsJsonAsync<User>("api/User", user);
+        }
+    }
+
+    protected void Cancel()
+    {
+        //si se cancela, se redirecciona a la lista de usuarios
+        navigationManager.NavigateTo("/fetchuserdetails");
+    }
 }
