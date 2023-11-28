@@ -3,7 +3,9 @@
 <h1>@Title Usuario</h1>
 <hr />
 <!--Creamos el formulario de edicion-->
-<EditForm Model="user" OnValidSubmit="SaveUser"> 
+<EditForm Model="@user" OnValidSubmit="SaveUser"> 
+
+    <DataAnnotationsValidator />
 
     <!--Controles para introducir los valores Nombre-->
     <div class="mb-3">
@@ -11,6 +13,7 @@
         <div class="col-md-4">
             <InputText class="form-control" @bind-Value="user.UserName"> </InputText>
         </div>
+        <ValidationMessage For="@(()=>user.UserName)" /> <!--Validacion de los datos-->
     </div>
     <!--Controlador de la direccion-->
     <div class="mb-3">
@@ -18,6 +21,7 @@
         <div class="col-md-4">
             <InputText class="form-control" @bind-Value="user.Address"></InputText>
         </div>
+        <ValidationMessage For="@(()=>user.Address)" /> <!--Validacion de los datos-->
     </div>
     <!--Controlador de Numero Celular-->
     <div class="mb-3">
@@ -25,6 +29,7 @@
         <div class="col-md-4">
             <InputText class="form-control" @bind-Value="user.CellNumber"></InputText>
         </div>
+        <ValidationMessage For="@(()=>user.CellNumber)" /> <!--Validacion de los datos-->
     </div>
     <!--Controlador del EmailId-->
     <div class="mb-3">
@@ -32,6 +37,7 @@
         <div class="col-md-4">
             <InputText class="form-control" @bind-Value="user.EmailId"></InputText>
         </div>
+        <ValidationMessage For="@(()=>user.EmailId)" /> <!--Validacion de los datos-->
     </div>
 
     <!--Botones para guardar y cancelar-->
@@ -71,6 +77,8 @@
             //si el usuario no existe, se agrega
             await Http.PostAsJsonAsync<User>("api/User", user);
         }
+        //se redirecciona a la lista de usuarios
+        Cancel();
     }
 
     protected void Cancel()

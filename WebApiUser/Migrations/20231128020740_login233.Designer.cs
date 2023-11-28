@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiUser.Models;
 
@@ -10,9 +11,11 @@ using WebApiUser.Models;
 namespace WebApiUser.Migrations
 {
     [DbContext(typeof(UserBDContext))]
-    partial class UserBDContextModelSnapshot : ModelSnapshot
+    [Migration("20231128020740_login233")]
+    partial class login233
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

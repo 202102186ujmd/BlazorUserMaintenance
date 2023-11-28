@@ -1,5 +1,62 @@
-﻿<h3>DeleteUser</h3>
+﻿@page "/user/delete/{userId:int}"
+
+<h2>Eliminar Usuario</h2>
+<br />
+<!--Creamos el formulario de eliminacion-->
+<div class="form-group">
+    <!--Mensaje de seguridad de eliminacion-->
+    <h4>¿Esta seguro que desea eliminar el usuario?</h4>
+    <table class="table">
+        <tbody>
+<tr>
+                <td>Nombre</td>
+                <td>@user.UserName</td>
+            </tr>
+            <tr>
+                <td>Direccion</td>
+                <td>@user.Address</td>
+            </tr>
+            <tr>
+                <td>Telefono Celular</td>
+                <td>@user.CellNumber</td>
+            </tr>
+            <tr>
+                <td>Correo Electronico</td>
+                <td>@user.EmailId</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!--Botones para eliminar y cancelar-->
+<div class="form-group">
+    <button type="submit" class="btn btn-danger" @onclick="(async ()=>await RemoveUser(userId))">Eliminar</button>
+    <button type="button" class="btn btn-warning" @onclick="Cancel">Cancelar</button>
+</div>
+
 
 @code {
+    [Parameter]
+    public int userId { get; set; }
+    User? user = new User();
+
+    //Cargamos los datos del usuario
+    protected override async Task OnInitializedAsync()
+    {
+        //Eliminamos el usuario
+        user = await Http.GetFromJsonAsync<User>("api/User/" + userId);
+    }
+
+    //Metodo para eliminar un usuario
+    protected async Task RemoveUser(int userId)
+    {
+        await Http.DeleteAsync("api/User/" + userId);<!--Eliminamos el usuario-->
+        navigationManager.NavigateTo("/fetchuserdetails");<!--Rregresamos a la pagina de detalles de usuario-->
+    }
+
+    //Metodo para cancelar la eliminacion de un usuario
+    void Cancel()
+    {
+        navigationManager.NavigateTo("/fetchuserdetails");
+    }
 
 }

@@ -8,6 +8,8 @@ namespace WebApiUser.Models
         {
         }
 
+        //Representacion de las tablas en la base de datos
         public DbSet<User.Shared.User> Users { get; set; }
+        public DbSet<User.Shared.Login> Login { get; set; }
     }
 }

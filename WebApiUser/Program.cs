@@ -18,7 +18,9 @@ builder.Services.AddDbContext<UserBDContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("UserConecctionBD"));
 });
+//Inyeccion de dependencias
 builder.Services.AddScoped<IUser, UserManagment>();
+builder.Services.AddScoped<ILogin, LoginServices>();
 
 var app = builder.Build();
 

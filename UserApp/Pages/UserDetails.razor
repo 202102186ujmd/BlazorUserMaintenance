@@ -10,15 +10,16 @@
     </div>
     <br />
     <!--Campo de busqueda-->
-    <div class="imput-group col">
+    <div class="input-group col">
         <input type="text" class="form-control" placeholder="Buscar por nombre"
-        @bind="searchString" @bind:event="oninput" @onkeyup="FilterUser" />
-        <!--Boton para limpiar el campo de busqueda-->
-        @if(searchString.Length > 0)
+               @bind="SearchString" @bind:event="oninput" @onkeyup="FilterUser" />
+
+        <!-- Boton para limpiar el campo de busqueda -->
+        @if (!string.IsNullOrEmpty(SearchString))
         {
-            <div class="input-group-apped">
-                <button class="btn btn-danger" @onclick="resetSearch">
-                    <i class="fas fa-times"></i>Limpiar
+            <div class="input-group-append">
+                <button class="btn btn-danger" @onclick="ResetSearch">
+                    <i class="fas fa-times"></i> Limpiar
                 </button>
             </div>
         }
@@ -75,7 +76,7 @@
     List<User>? usersList = new List<User>();
     List<User>? searchUserData = new List<User>();//lo que se encontro de la busqueda
     User user= new User();
-    string searchString { get; set; }=string.Empty; //capturamos lo que se quiere buscar
+    string SearchString { get; set; }=string.Empty; //capturamos lo que se quiere buscar
 
     //Metodo para obtener los usuarios y cargarlos en la lista
     protected override  async Task OnInitializedAsync()
@@ -93,11 +94,11 @@
     //Metodo para filtrar los usuarios y realizar la busqueda
     protected void FilterUser()
     {
-        if (!string.IsNullOrEmpty(searchString))
+        if (!string.IsNullOrEmpty(SearchString))
         {
             //si hay algo en el campo de busqueda, se filtra la lista de usuarios
             usersList= searchUserData
-            .Where(x => x.UserName.IndexOf(searchString,StringComparison.OrdinalIgnoreCase)!= -1)
+            .Where(x => x.UserName.IndexOf(SearchString,StringComparison.OrdinalIgnoreCase)!= -1)
             .ToList();
         }
         else
@@ -107,9 +108,9 @@
     }
 
     //Metodo para limpiar el campo de busqueda
-    protected void resetSearch()
+    protected void ResetSearch()
     {
-        searchString = string.Empty;//limpiamos el campo de busqueda
+        SearchString = string.Empty;//limpiamos el campo de busqueda
         usersList = searchUserData;//cargamos todos los usuarios
 
     }
