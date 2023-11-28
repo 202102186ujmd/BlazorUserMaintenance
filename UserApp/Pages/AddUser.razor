@@ -1,4 +1,46 @@
-﻿@page "/adduser"
+﻿@page "/user/add"
+@page "/user/edit/{userId:int}"
+<h1>@Title Usuario</h1>
+<hr />
+<!--Creamos el formulario de edicion-->
+<EditForm Model="user" OnValidSubmit="SaveUser"> 
+
+    <!--Controles para introducir los valores Nombre-->
+    <div class="mb-3">
+        <label for="Name" class="form-label">Nombre</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="user.UserName"> </InputText>
+        </div>
+    </div>
+    <!--Controlador de la direccion-->
+    <div class="mb-3">
+        <label for="Address" class="form-label">Direccion</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="user.Address"></InputText>
+        </div>
+    </div>
+    <!--Controlador de Numero Celular-->
+    <div class="mb-3">
+        <label for="Cellnumber" class="form-label">Telefono Celular</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="user.CellNumber"></InputText>
+        </div>
+    </div>
+    <!--Controlador del EmailId-->
+    <div class="mb-3">
+        <label for="EmailId" class="form-label">Correo Electronico</label>
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="user.EmailId"></InputText>
+        </div>
+    </div>
+
+    <!--Botones para guardar y cancelar-->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-secondary" @onclick="Cancel">Cancelar</button>        
+    </div>
+
+</EditForm>
 
 @code {
     [Parameter]
