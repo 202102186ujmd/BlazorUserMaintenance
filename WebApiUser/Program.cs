@@ -1,38 +1,64 @@
 using Microsoft.EntityFrameworkCore;
+using NLog;
+using NLog.Web;
 using WebApiUser.Interfaces;
 using WebApiUser.Models;
 using WebApiUser.Services;
 
-var builder = WebApplication.CreateBuilder(args);
 
+#region Nlog Service
 
+var logger = LogManager.Setup().
+    LoadConfigurationFromAppSettings().
+    GetCurrentClassLogger();
+
+logger.Debug("Init main");
+#endregion
+
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
+
+    // Add services to the container.
+
+    builder.Services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    //Conexion a la base de datos
+    builder.Services.AddDbContext<UserBDContext>(options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("UserConecctionBD"));
+    });
+    //Inyeccion de dependencias
+    builder.Services.AddScoped<ISolicitanteRepository, SolicitanteRepository>();
+    builder.Services.AddScoped<ISolicitudesRepository, SolicitudesRepository>();
     
 
-// Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<UserBDContext>(options =>
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+}
+catch (Exception ex)
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("UserConecctionBD"));
-});
-//Inyeccion de dependencias
-builder.Services.AddScoped<IUser, UserManagment>();
-builder.Services.AddScoped<ILogin, LoginServices>();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    logger.Error(ex, "Error en la aplicación");
+    throw;
+}
+finally
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    LogManager.Shutdown();
 }
 
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

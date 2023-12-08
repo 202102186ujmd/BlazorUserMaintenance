@@ -12,7 +12,8 @@ builder.Services.AddSingleton<WeatherForecastService>();
 //agregar el servicio de httpclient que contendra la url del api y la configuracion de la misma
 builder.Services.AddHttpClient("",options =>
 {
-    options.BaseAddress = new Uri(builder.Configuration.GetSection("UrlData").GetValue<string>("BaseAddressURL"));
+    options.BaseAddress = new Uri(builder.Configuration.GetSection("UrlData").GetValue<string>("BaseAddressURL"));//agregar la url del api
+    options.DefaultRequestHeaders.Add("ApiKey",builder.Configuration.GetSection("ApiKey").Value);//agregar el apikey al header
 });
 
 var app = builder.Build();
